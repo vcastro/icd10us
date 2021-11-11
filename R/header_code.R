@@ -8,12 +8,6 @@
 #' @param x a valid ICD-10-CM code
 #'
 #' @return Tibble of all matching ICD-10-CM rows from icd10cm
-#' @importFrom dplyr mutate
-#' @importFrom dplyr filter
-#' @importFrom dplyr pull
-#' @importFrom dplyr slice_max
-#' @importFrom dplyr str_length
-#' @importFrom magrittr %>%
 #' @importFrom rlang .data
 #' @export
 #'
@@ -22,21 +16,29 @@
 #'
 #' # you can also pass a vector of codes and then get the distinct
 #' # header codes using purrr
-#' icd10cm::icd10cm %>%
-#'   filter(stringr::str_starts(icd10cm_code, "F32")) %>%
-#'   pull(icd10cm_code) %>%
+#' icd10cm %>%
+#'   dplyr::filter(stringr::str_starts(icd10cm_code, "F32")) %>%
+#'   dplyr::pull(icd10cm_code) %>%
 #'   purrr::map_dfr(header_code) %>%
 #'   unique()
 #'
 header_code <- function(x) {
 
-  code_order_num <- icd10cm::icd10cm %>%
-    filter(.data$icd10cm_code == x) %>%
-    pull(.data$order_number)
+  icd10cm <- NULL
+  utils::data(icd10cm, envir = environment())
 
-  icd10cm::icd10cm %>%
-    filter(.data$order_number <= .data$code_order_num &
-             (.data$valid_billing_code == 0 | str_length(.data$icd10cm_code) == 3)) %>%
-    slice_max(.data$order_number)
+    code_order_num <- icd10cm %>%
+    dplyr::filter(.data$icd10cm_code == x) %>%
+    dplyr::pull(.data$order_number)
+
+  icd10cm %>%
+    dplyr::filter(
+      .data$order_number <= code_order_num &
+        (
+          .data$valid_billing_code == 0 |
+            stringr::str_length(.data$icd10cm_code) == 3
+        )
+    ) %>%
+    dplyr::slice_max(.data$order_number)
 
 }

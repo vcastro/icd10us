@@ -1,4 +1,5 @@
 library(testthat)
-library(icd10cm)
+library(icd10us)
 
-test_check("icd10cm")
+
+test_check("icd10us")

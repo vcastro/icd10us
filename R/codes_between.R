@@ -11,6 +11,7 @@
 #'   children of the end code
 #'
 #' @return Tibble of all matching ICD-10-CM rows from icd10cm
+#' @importFrom rlang .data
 #' @export
 #'
 #' @examples
@@ -18,26 +19,29 @@
 codes_between <-
   function(start_code, end_code, expand_end_code = TRUE) {
     stopifnot(end_code > start_code)
-    stopifnot(str_length(start_code) >= 3)
-    stopifnot(str_length(end_code) >= 3)
+    stopifnot(stringr::str_length(start_code) >= 3)
+    stopifnot(stringr::str_length(end_code) >= 3)
+
+    icd10cm <- NULL
+    utils::data(icd10cm, envir = environment())
 
     start_num <- icd10cm %>%
-      filter(icd10cm_code == start_code) %>%
-      pull(order_number)
+      dplyr::filter(.data$icd10cm_code == start_code) %>%
+      dplyr::pull(.data$order_number)
 
 
     if (expand_end_code) {
       end_num <- expand_code(end_code) %>%
-        summarize(max_order_num = max(order_number)) %>%
-        pull(max_order_num)
+        dplyr::summarize(max_order_num = max(.data$order_number)) %>%
+        dplyr::pull(.data$max_order_num)
     } else {
-      start_num <- icd10cm %>%
-        filter(icd10cm_code == end_code) %>%
-        pull(order_number)
+      end_num <- icd10cm %>%
+        dplyr::filter(.data$icd10cm_code == end_code) %>%
+        dplyr::pull(.data$order_number)
     }
 
     icd10cm %>%
-      filter(order_number >= start_num &
-               order_number <= end_num)
+      dplyr::filter(.data$order_number >= start_num &
+                      .data$order_number <= end_num)
 
   }

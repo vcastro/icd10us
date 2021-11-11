@@ -22,9 +22,9 @@ header_code("F320")
 
 # you can also pass a vector of codes and then get the distinct
 # header codes using purrr
-icd10cm::icd10cm \%>\%
-  filter(stringr::str_starts(icd10cm_code, "F32")) \%>\%
-  pull(icd10cm_code) \%>\%
+icd10cm \%>\%
+  dplyr::filter(stringr::str_starts(icd10cm_code, "F32")) \%>\%
+  dplyr::pull(icd10cm_code) \%>\%
   purrr::map_dfr(header_code) \%>\%
   unique()
 

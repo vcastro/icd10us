@@ -13,12 +13,10 @@ remove_dot(x)
 A valid ICD-10 code without a dot included
 }
 \description{
-\code{remove_dot()} removes a dot from the ICD-10 code
+\code{remove_dot()} removes a dot from the ICD-10 code if it exists
 }
 \examples{
 remove_dot("F32.0")
 
 remove_dot("F32")
-
-icd10cm \%>\% mutate(remove_dot(add_dot(icd10cm_code)))
 }

@@ -17,9 +17,8 @@ Boolean
 and has between 3 and 8 characters, and starts with a letter and number.
 }
 \examples{
-is_valid_icd10cm("F320") #invalid
+is_valid_icd10cm("F320") # valid
 is_valid_icd10cm("F32")  # valid
-is_valid_icd10cm("296")  $invalid
+is_valid_icd10cm("296")  # invalid
 
-icd10cm \%>\% mutate(valid = is_valid_icd10cm(icd10cm_code))
 }

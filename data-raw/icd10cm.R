@@ -83,3 +83,12 @@ icd10cm <- icd10cm %>%
 
 
 usethis::use_data(icd10cm, overwrite = TRUE, compress = "bzip2")
+
+
+
+## Maybe add MEDPAR counts
+# # https://www.cms.gov/files/zip/icd-10-cm-diagnosis-codes-impact-resource-use-file-fy2019-and-fy2020-medpar.zip
+# # ICD_10_CM_Diagnosis_Codes_Impact_on_Resource_Use_File___FY2019_and_FY2020_MedPAR.xlsx.xlsx
+
+
+## Maybe add Mortality from CDC WONDER - separate data with conditions

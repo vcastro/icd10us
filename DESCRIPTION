@@ -2,7 +2,10 @@ Package: icd10us
 Title: Work with U.S. ICD-10 Diagnosis and Procedure Codes
 Version: 2022.1
 Authors@R: 
-    person("Victor", "Castro", "castro.v@northeastern.edu", role = c("aut", "cre"),
+    person(given = "Victor", 
+           family = "Castro", 
+           email = "castro.v@northeastern.edu", 
+           role = c("aut", "cre"),
            comment = c(ORCID = "https://orcid.org/0000-0001-7390-6354"))
 Description: Primarily a data package that includes ICD-10-CM diagnosis and 
     ICD-10-PCS procedure codes and metadata provided by the US Centers for Medicare 
@@ -25,3 +28,5 @@ Suggests:
 Config/testthat/edition: 3
 Depends: 
     R (>= 2.10)
+URL: https://github.com/vcastro/icd10us
+BugReports: https://github.com/vcastro/icd10us/issues
