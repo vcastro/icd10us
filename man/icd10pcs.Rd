@@ -32,12 +32,20 @@ ICD-10-PCS procedure codes
 }
 \details{
 Procedure class is derived from the HCUP Procedure Class file.  From the
-user guide, codes are divided into 4 classes:\tabular{ll}{
-   \strong{procedure_class} \tab \strong{description} \cr
-   Minor Diagnostic \tab Nonoperating room procedures that are diagnostic (e.g., B244ZZZ, Ultrasonography of Right Heart) \cr
-   Minor Therapeutic \tab Nonoperating room procedures that are therapeutic (e.g., 02HQ33Z, Insertion of Infusion Device into Right Pulmonary Artery, Percutaneous Approach) \cr
-   Major Diagnostic \tab Procedures that are considered operating room procedures that are performed for diagnostic reasons (e.g., 02BV0ZX, Excision of Superior Vena Cava, Open Approach, Diagnostic) \cr
-   Major Therapeutic \tab Procedures that are considered operating room procedures that are performed for therapeutic reasons (e.g., 0210093, Bypass Coronary Artery, One Site from Coronary Artery with Autologous Venous Tissue, Open Approach). \cr
+user guide, codes are divided into 4 classes:
+\itemize{
+\item \strong{Minor Diagnostic}: Nonoperating room procedures that are diagnostic
+(e.g., B244ZZZ, Ultrasonography of Right Heart)
+\item \strong{Minor Therapeutic}: Nonoperating room procedures that are therapeutic
+(e.g., 02HQ33Z, Insertion of Infusion Device into Right Pulmonary Artery,
+Percutaneous Approach)
+\item \strong{Major Diagnostic}: Procedures that are considered operating room
+procedures that are performed for diagnostic reasons (e.g., 02BV0ZX, Excision
+of Superior Vena Cava, Open Approach, Diagnostic)
+\item \strong{Major Therapeutic}: Procedures that are considered operating room
+procedures that are performed for therapeutic reasons (e.g., 0210093, Bypass
+Coronary Artery, One Site from Coronary Artery with Autologous Venous Tissue,
+Open Approach).
 }
 }
 \keyword{datasets}

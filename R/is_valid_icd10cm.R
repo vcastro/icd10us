@@ -17,9 +17,9 @@
 is_valid_icd10cm <- function(x) {
 
   dplyr::case_when(
-    stringr::str_length(x) < 3 ~ FALSE,   # has at least 3 characters
-    stringr::str_length(x) > 8 ~ FALSE,   # has less than 8 characters (incl dot)
-    !stringr::str_starts(x, "[A-Z][0-9]") ~ FALSE,  # starts with a letter and number
+    stringr::str_length(x) < 3 ~ FALSE, # has at least 3 characters
+    stringr::str_length(x) > 8 ~ FALSE, # has less than 8 characters (incl dot)
+    !stringr::str_starts(x, "[A-Z][0-9]") ~ FALSE, # starts with letter & number
     stringr::str_count(x, "[0-9]") < 1 ~ FALSE, # has at least 1 number
     TRUE ~ TRUE
   )
