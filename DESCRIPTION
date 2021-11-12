@@ -21,7 +21,8 @@ Imports:
     dplyr,
     magrittr,
     rlang,
-    stringr
+    stringr,
+    tibble
 Suggests: 
     purrr,
     testthat (>= 3.0.0)
