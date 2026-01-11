@@ -16,8 +16,8 @@ code 1=Yes, 0=No}
 \item{\code{poa_exempt}}{Flag to indicate if code is exempt from present
 on admission (POA) rules. Y=Exempt, N=Not exempt, NA=Not applicable}
 \item{\code{chronic_indicator}}{Flag to indicate if code is acute or
-chronic based on HCUP Chronic Care Indicator data. 1=Chronic, 0=Acute,
-9=Missing/Not applicable, NA=Not in HCUP data}
+chronic based on HCUP Chronic Care Indicator data. C=Chronic, A=Acute,
+NA=Not applicable}
 }
 }
 \source{

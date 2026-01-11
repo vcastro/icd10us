@@ -1,0 +1,32 @@
+Package: icd10us
+Title: Work with U.S. ICD-10 Diagnosis and Procedure Codes
+Version: 2026.1
+Authors@R: 
+    person(given = "Victor", 
+           family = "Castro", 
+           email = "castro.v@northeastern.edu", 
+           role = c("aut", "cre"),
+           comment = c(ORCID = "https://orcid.org/0000-0001-7390-6354"))
+Description: Primarily a data package that includes ICD-10-CM diagnosis and 
+    ICD-10-PCS procedure codes and metadata provided by the US Centers for Medicare 
+    and Medicaid Services (CMS). Additional metadata from the Healthcare Cost and 
+    Utilization Project (HCUP) is also included. All datasets are in the public 
+    domain. Functions to transform, filter and group codes are also included.
+License: CC BY 4.0
+Encoding: UTF-8
+LazyData: true
+Language: en
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports: dplyr, magrittr, rlang, stringr, tibble
+Suggests: knitr, purrr, rmarkdown, testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+Depends: R (>= 3.5)
+URL: https://github.com/vcastro/icd10us
+BugReports: https://github.com/vcastro/icd10us/issues
+NeedsCompilation: no
+Packaged: 2026-01-11 04:24:44 UTC; runner
+Author: Victor Castro [aut, cre] (<https://orcid.org/0000-0001-7390-6354>)
+Maintainer: Victor Castro <castro.v@northeastern.edu>
+Built: R 4.3.3; ; 2026-01-11 04:25:03 UTC; unix

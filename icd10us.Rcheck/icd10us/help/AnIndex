@@ -1,0 +1,12 @@
+%>%	pipe
+add_dot	add_dot
+codes_between	codes_between
+expand_code	expand_code
+header_code	header_code
+icd10cm	icd10cm
+icd10cm_chapters	icd10cm_chapters
+icd10pcs	icd10pcs
+icd10pcs_sections	icd10pcs_sections
+is_valid_icd10cm	is_valid_icd10cm
+remove_dot	remove_dot
+sample_icd10cm	sample_icd10cm

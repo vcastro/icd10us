@@ -1,0 +1,713 @@
+
+R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "icd10us"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('icd10us')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("add_dot")
+> ### * add_dot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: add_dot
+> ### Title: Add a dot to an ICD-10 code
+> ### Aliases: add_dot
+> 
+> ### ** Examples
+> 
+> add_dot("F320")     # Returns "F32.0"
+[1] "F32.0"
+> add_dot("E119")     # Returns "E11.9"
+[1] "E11.9"
+> add_dot("F32")      # Returns "F32" (no dot added for 3-character codes)
+[1] "F32"
+> add_dot("A0101")    # Returns "A01.01"
+[1] "A01.01"
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("codes_between")
+> ### * codes_between
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: codes_between
+> ### Title: List all ICD-10-CM codes between two codes
+> ### Aliases: codes_between
+> 
+> ### ** Examples
+> 
+> # Get all codes from F32 to F33 (depression disorders)
+> codes_between("F32", "F33")
+# A tibble: 23 × 7
+   order_number icd10cm_code valid_billing_code icd10cm_short_description       
+          <int> <chr>                     <dbl> <chr>                           
+ 1         5935 F32                           0 Depressive episode              
+ 2         5936 F320                          1 Major depressive disorder, sing…
+ 3         5937 F321                          1 Major depressive disorder, sing…
+ 4         5938 F322                          1 Major depressv disord, single e…
+ 5         5939 F323                          1 Major depressv disord, single e…
+ 6         5940 F324                          1 Major depressv disorder, single…
+ 7         5941 F325                          1 Major depressive disorder, sing…
+ 8         5942 F328                          0 Other depressive episodes       
+ 9         5943 F3281                         1 Premenstrual dysphoric disorder 
+10         5944 F3289                         1 Other specified depressive epis…
+# ℹ 13 more rows
+# ℹ 3 more variables: icd10cm_long_description <chr>, poa_exempt <chr>,
+#   chronic_indicator <chr>
+> 
+> # Get codes without expanding the end code
+> codes_between("F32", "F33", expand_end_code = FALSE)
+# A tibble: 13 × 7
+   order_number icd10cm_code valid_billing_code icd10cm_short_description       
+          <int> <chr>                     <dbl> <chr>                           
+ 1         5935 F32                           0 Depressive episode              
+ 2         5936 F320                          1 Major depressive disorder, sing…
+ 3         5937 F321                          1 Major depressive disorder, sing…
+ 4         5938 F322                          1 Major depressv disord, single e…
+ 5         5939 F323                          1 Major depressv disord, single e…
+ 6         5940 F324                          1 Major depressv disorder, single…
+ 7         5941 F325                          1 Major depressive disorder, sing…
+ 8         5942 F328                          0 Other depressive episodes       
+ 9         5943 F3281                         1 Premenstrual dysphoric disorder 
+10         5944 F3289                         1 Other specified depressive epis…
+11         5945 F329                          1 Major depressive disorder, sing…
+12         5946 F32A                          1 Depression, unspecified         
+13         5947 F33                           0 Major depressive disorder, recu…
+# ℹ 3 more variables: icd10cm_long_description <chr>, poa_exempt <chr>,
+#   chronic_indicator <chr>
+> 
+> # Get a broader range
+> codes_between("F30", "F39")
+# A tibble: 76 × 7
+   order_number icd10cm_code valid_billing_code icd10cm_short_description       
+          <int> <chr>                     <dbl> <chr>                           
+ 1         5890 F30                           0 Manic episode                   
+ 2         5891 F301                          0 Manic episode without psychotic…
+ 3         5892 F3010                         1 Manic episode without psychotic…
+ 4         5893 F3011                         1 Manic episode without psychotic…
+ 5         5894 F3012                         1 Manic episode without psychotic…
+ 6         5895 F3013                         1 Manic episode, severe, without …
+ 7         5896 F302                          1 Manic episode, severe with psyc…
+ 8         5897 F303                          1 Manic episode in partial remiss…
+ 9         5898 F304                          1 Manic episode in full remission 
+10         5899 F308                          1 Other manic episodes            
+# ℹ 66 more rows
+# ℹ 3 more variables: icd10cm_long_description <chr>, poa_exempt <chr>,
+#   chronic_indicator <chr>
+> 
+> # Can be combined with other operations
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> codes_between("F32", "F33") %>%
++   filter(valid_billing_code == 1) %>%
++   select(icd10cm_code, icd10cm_short_description)
+# A tibble: 19 × 2
+   icd10cm_code icd10cm_short_description                                   
+   <chr>        <chr>                                                       
+ 1 F320         Major depressive disorder, single episode, mild             
+ 2 F321         Major depressive disorder, single episode, moderate         
+ 3 F322         Major depressv disord, single epsd, sev w/o psych features  
+ 4 F323         Major depressv disord, single epsd, severe w psych features 
+ 5 F324         Major depressv disorder, single episode, in partial remis   
+ 6 F325         Major depressive disorder, single episode, in full remission
+ 7 F3281        Premenstrual dysphoric disorder                             
+ 8 F3289        Other specified depressive episodes                         
+ 9 F329         Major depressive disorder, single episode, unspecified      
+10 F32A         Depression, unspecified                                     
+11 F330         Major depressive disorder, recurrent, mild                  
+12 F331         Major depressive disorder, recurrent, moderate              
+13 F332         Major depressv disorder, recurrent severe w/o psych features
+14 F333         Major depressv disorder, recurrent, severe w psych symptoms 
+15 F3340        Major depressive disorder, recurrent, in remission, unsp    
+16 F3341        Major depressive disorder, recurrent, in partial remission  
+17 F3342        Major depressive disorder, recurrent, in full remission     
+18 F338         Other recurrent depressive disorders                        
+19 F339         Major depressive disorder, recurrent, unspecified           
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:dplyr’
+
+> nameEx("expand_code")
+> ### * expand_code
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: expand_code
+> ### Title: Expand an ICD-10-CM code to show all child codes
+> ### Aliases: expand_code
+> 
+> ### ** Examples
+> 
+> # Expand F32 to see all depression subtypes
+> expand_code("F32")
+# A tibble: 12 × 7
+   order_number icd10cm_code valid_billing_code icd10cm_short_description       
+          <int> <chr>                     <dbl> <chr>                           
+ 1         5935 F32                           0 Depressive episode              
+ 2         5936 F320                          1 Major depressive disorder, sing…
+ 3         5937 F321                          1 Major depressive disorder, sing…
+ 4         5938 F322                          1 Major depressv disord, single e…
+ 5         5939 F323                          1 Major depressv disord, single e…
+ 6         5940 F324                          1 Major depressv disorder, single…
+ 7         5941 F325                          1 Major depressive disorder, sing…
+ 8         5942 F328                          0 Other depressive episodes       
+ 9         5943 F3281                         1 Premenstrual dysphoric disorder 
+10         5944 F3289                         1 Other specified depressive epis…
+11         5945 F329                          1 Major depressive disorder, sing…
+12         5946 F32A                          1 Depression, unspecified         
+# ℹ 3 more variables: icd10cm_long_description <chr>, poa_exempt <chr>,
+#   chronic_indicator <chr>
+> 
+> # Expand a more specific code
+> expand_code("F320")
+# A tibble: 1 × 7
+  order_number icd10cm_code valid_billing_code icd10cm_short_description        
+         <int> <chr>                     <dbl> <chr>                            
+1         5936 F320                          1 Major depressive disorder, singl…
+# ℹ 3 more variables: icd10cm_long_description <chr>, poa_exempt <chr>,
+#   chronic_indicator <chr>
+> 
+> # Can be used with other functions
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> expand_code("F32") %>%
++   filter(valid_billing_code == 1) %>%
++   select(icd10cm_code, icd10cm_short_description)
+# A tibble: 10 × 2
+   icd10cm_code icd10cm_short_description                                   
+   <chr>        <chr>                                                       
+ 1 F320         Major depressive disorder, single episode, mild             
+ 2 F321         Major depressive disorder, single episode, moderate         
+ 3 F322         Major depressv disord, single epsd, sev w/o psych features  
+ 4 F323         Major depressv disord, single epsd, severe w psych features 
+ 5 F324         Major depressv disorder, single episode, in partial remis   
+ 6 F325         Major depressive disorder, single episode, in full remission
+ 7 F3281        Premenstrual dysphoric disorder                             
+ 8 F3289        Other specified depressive episodes                         
+ 9 F329         Major depressive disorder, single episode, unspecified      
+10 F32A         Depression, unspecified                                     
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:dplyr’
+
+> nameEx("header_code")
+> ### * header_code
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: header_code
+> ### Title: Retrieve the header code for a given ICD-10-CM code
+> ### Aliases: header_code
+> 
+> ### ** Examples
+> 
+> # Get header code for a specific diagnosis
+> header_code("F320")
+# A tibble: 1 × 7
+  order_number icd10cm_code valid_billing_code icd10cm_short_description
+         <int> <chr>                     <dbl> <chr>                    
+1         5935 F32                           0 Depressive episode       
+# ℹ 3 more variables: icd10cm_long_description <chr>, poa_exempt <chr>,
+#   chronic_indicator <chr>
+> 
+> # Header code returns itself if already a header
+> header_code("F32")
+# A tibble: 1 × 7
+  order_number icd10cm_code valid_billing_code icd10cm_short_description
+         <int> <chr>                     <dbl> <chr>                    
+1         5935 F32                           0 Depressive episode       
+# ℹ 3 more variables: icd10cm_long_description <chr>, poa_exempt <chr>,
+#   chronic_indicator <chr>
+> 
+> # You can also pass a vector of codes and get distinct header codes
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> library(purrr)
+> icd10cm %>%
++   dplyr::filter(stringr::str_starts(icd10cm_code, "F32")) %>%
++   dplyr::pull(icd10cm_code) %>%
++   purrr::map_dfr(header_code) %>%
++   unique()
+# A tibble: 2 × 7
+  order_number icd10cm_code valid_billing_code icd10cm_short_description
+         <int> <chr>                     <dbl> <chr>                    
+1         5935 F32                           0 Depressive episode       
+2         5942 F328                          0 Other depressive episodes
+# ℹ 3 more variables: icd10cm_long_description <chr>, poa_exempt <chr>,
+#   chronic_indicator <chr>
+> 
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:purrr’, ‘package:dplyr’
+
+> nameEx("icd10cm")
+> ### * icd10cm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: icd10cm
+> ### Title: ICD-10-CM Codes.
+> ### Aliases: icd10cm
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> # View the first few rows
+> head(icd10cm)
+# A tibble: 6 × 7
+  order_number icd10cm_code valid_billing_code icd10cm_short_description        
+         <int> <chr>                     <dbl> <chr>                            
+1            1 A00                           0 Cholera                          
+2            2 A000                          1 Cholera due to Vibrio cholerae 0…
+3            3 A001                          1 Cholera due to Vibrio cholerae 0…
+4            4 A009                          1 Cholera, unspecified             
+5            5 A01                           0 Typhoid and paratyphoid fevers   
+6            6 A010                          0 Typhoid fever                    
+# ℹ 3 more variables: icd10cm_long_description <chr>, poa_exempt <chr>,
+#   chronic_indicator <chr>
+> 
+> # Filter to valid billing codes only
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> icd10cm %>% filter(valid_billing_code == 1)
+# A tibble: 74,719 × 7
+   order_number icd10cm_code valid_billing_code icd10cm_short_description       
+          <int> <chr>                     <dbl> <chr>                           
+ 1            2 A000                          1 Cholera due to Vibrio cholerae …
+ 2            3 A001                          1 Cholera due to Vibrio cholerae …
+ 3            4 A009                          1 Cholera, unspecified            
+ 4            7 A0100                         1 Typhoid fever, unspecified      
+ 5            8 A0101                         1 Typhoid meningitis              
+ 6            9 A0102                         1 Typhoid fever with heart involv…
+ 7           10 A0103                         1 Typhoid pneumonia               
+ 8           11 A0104                         1 Typhoid arthritis               
+ 9           12 A0105                         1 Typhoid osteomyelitis           
+10           13 A0109                         1 Typhoid fever with other compli…
+# ℹ 74,709 more rows
+# ℹ 3 more variables: icd10cm_long_description <chr>, poa_exempt <chr>,
+#   chronic_indicator <chr>
+> 
+> # Find all chronic conditions
+> icd10cm %>% filter(chronic_indicator == "C")
+# A tibble: 0 × 7
+# ℹ 7 variables: order_number <int>, icd10cm_code <chr>,
+#   valid_billing_code <dbl>, icd10cm_short_description <chr>,
+#   icd10cm_long_description <chr>, poa_exempt <chr>, chronic_indicator <chr>
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:dplyr’
+
+> nameEx("icd10cm_chapters")
+> ### * icd10cm_chapters
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: icd10cm_chapters
+> ### Title: ICD-10-CM Chapters
+> ### Aliases: icd10cm_chapters
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> # View all chapters
+> icd10cm_chapters
+# A tibble: 22 × 5
+   chapter_num chapter_abbr chapter_desc                     code_start code_end
+         <dbl> <chr>        <chr>                            <chr>      <chr>   
+ 1           1 INF          Certain infectious and parasiti… A00        B99     
+ 2           2 ONC          Neoplasms                        C00        D49     
+ 3           3 BLOOD        Diseases of the blood and blood… D50        D89     
+ 4           4 METAB        Endocrine, nutritional and meta… E00        E89     
+ 5           5 PSYCH        Mental, behavioral and neurodev… F01        F99     
+ 6           6 NEURO        Diseases of the nervous system   G00        G99     
+ 7           7 EYE          Diseases of the eye and adnexa   H00        H59     
+ 8           8 ENT          Diseases of the ear and mastoid… H60        H95     
+ 9           9 CARDIO       Diseases of the circulatory sys… I00        I99     
+10          10 PULM         Diseases of the respiratory sys… J00        J99     
+# ℹ 12 more rows
+> 
+> # Find the chapter for mental health conditions
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> icd10cm_chapters %>% filter(chapter_abbr == "Mental")
+# A tibble: 0 × 5
+# ℹ 5 variables: chapter_num <dbl>, chapter_abbr <chr>, chapter_desc <chr>,
+#   code_start <chr>, code_end <chr>
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:dplyr’
+
+> nameEx("icd10pcs")
+> ### * icd10pcs
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: icd10pcs
+> ### Title: ICD-10-PCS Codes.
+> ### Aliases: icd10pcs
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> # View the first few rows
+> head(icd10pcs)
+# A tibble: 6 × 6
+  order_number icd10pcs_code valid_billing_code icd10pcs_short_description      
+         <int> <chr>                      <dbl> <chr>                           
+1            1 001                            0 Central Nervous System and Cran…
+2            2 0016070                        1 Bypass Cereb Vent to Nasophar w…
+3            3 0016071                        1 Bypass Cereb Vent to Mastoid Si…
+4            4 0016072                        1 Bypass Cereb Vent to Atrium wit…
+5            5 0016073                        1 Bypass Cereb Vent to Blood Vess…
+6            6 0016074                        1 Bypass Cereb Vent to Pleural Ca…
+# ℹ 2 more variables: icd10pcs_long_description <chr>, procedure_class <chr>
+> 
+> # Filter to valid billing codes only
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> icd10pcs %>% filter(valid_billing_code == 1)
+# A tibble: 79,115 × 6
+   order_number icd10pcs_code valid_billing_code icd10pcs_short_description     
+          <int> <chr>                      <dbl> <chr>                          
+ 1            2 0016070                        1 Bypass Cereb Vent to Nasophar …
+ 2            3 0016071                        1 Bypass Cereb Vent to Mastoid S…
+ 3            4 0016072                        1 Bypass Cereb Vent to Atrium wi…
+ 4            5 0016073                        1 Bypass Cereb Vent to Blood Ves…
+ 5            6 0016074                        1 Bypass Cereb Vent to Pleural C…
+ 6            7 0016075                        1 Bypass Cereb Vent to Intestine…
+ 7            8 0016076                        1 Bypass Cereb Vent to Periton C…
+ 8            9 0016077                        1 Bypass Cereb Vent to Urinary T…
+ 9           10 0016078                        1 Bypass Cereb Vent to Bone Mar …
+10           11 001607A                        1 Bypass Cereb Vent to Subgaleal…
+# ℹ 79,105 more rows
+# ℹ 2 more variables: icd10pcs_long_description <chr>, procedure_class <chr>
+> 
+> # Find all major therapeutic procedures
+> icd10pcs %>% filter(procedure_class == "Major Therapeutic")
+# A tibble: 53,833 × 6
+   order_number icd10pcs_code valid_billing_code icd10pcs_short_description     
+          <int> <chr>                      <dbl> <chr>                          
+ 1            2 0016070                        1 Bypass Cereb Vent to Nasophar …
+ 2            3 0016071                        1 Bypass Cereb Vent to Mastoid S…
+ 3            4 0016072                        1 Bypass Cereb Vent to Atrium wi…
+ 4            5 0016073                        1 Bypass Cereb Vent to Blood Ves…
+ 5            6 0016074                        1 Bypass Cereb Vent to Pleural C…
+ 6            7 0016075                        1 Bypass Cereb Vent to Intestine…
+ 7            8 0016076                        1 Bypass Cereb Vent to Periton C…
+ 8            9 0016077                        1 Bypass Cereb Vent to Urinary T…
+ 9           10 0016078                        1 Bypass Cereb Vent to Bone Mar …
+10           11 001607A                        1 Bypass Cereb Vent to Subgaleal…
+# ℹ 53,823 more rows
+# ℹ 2 more variables: icd10pcs_long_description <chr>, procedure_class <chr>
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:dplyr’
+
+> nameEx("icd10pcs_sections")
+> ### * icd10pcs_sections
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: icd10pcs_sections
+> ### Title: ICD-10-PCS Code Sections.
+> ### Aliases: icd10pcs_sections
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> # View all sections
+> icd10pcs_sections
+# A tibble: 17 × 2
+   section_digit section_description                                  
+   <chr>         <chr>                                                
+ 1 0             Medical and Surgical                                 
+ 2 1             Obstetrics                                           
+ 3 2             Placement                                            
+ 4 3             Administration                                       
+ 5 4             Measurement and Monitoring                           
+ 6 5             Extracorporeal or Systemic Assistance and Performance
+ 7 6             Extracorporeal or Systemic Therapies                 
+ 8 7             Osteopathic                                          
+ 9 8             Other Procedures                                     
+10 9             Chiropractic                                         
+11 B             Imaging                                              
+12 C             Nuclear Medicine                                     
+13 D             Radiation Therapy                                    
+14 F             Physical Rehabilitation and Diagnostic Audiology     
+15 G             Mental Health                                        
+16 H             Substance Abuse Treatment                            
+17 X             New Technology                                       
+> 
+> # Find the Medical and Surgical section
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> icd10pcs_sections %>% filter(section_digit == "0")
+# A tibble: 1 × 2
+  section_digit section_description 
+  <chr>         <chr>               
+1 0             Medical and Surgical
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:dplyr’
+
+> nameEx("is_valid_icd10cm")
+> ### * is_valid_icd10cm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: is_valid_icd10cm
+> ### Title: Check if a string is a valid ICD-10-CM code format
+> ### Aliases: is_valid_icd10cm
+> 
+> ### ** Examples
+> 
+> is_valid_icd10cm("F320")  # TRUE - valid format
+[1] TRUE
+> is_valid_icd10cm("F32")   # TRUE - valid format
+[1] TRUE
+> is_valid_icd10cm("F32.0") # TRUE - valid format with dot
+[1] TRUE
+> is_valid_icd10cm("296")   # FALSE - ICD-9 format (starts with number)
+[1] FALSE
+> is_valid_icd10cm("F")     # FALSE - too short
+[1] FALSE
+> is_valid_icd10cm("ABCDEF") # FALSE - no numbers
+[1] FALSE
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("remove_dot")
+> ### * remove_dot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: remove_dot
+> ### Title: Remove dot from an ICD-10 code
+> ### Aliases: remove_dot
+> 
+> ### ** Examples
+> 
+> remove_dot("F32.0")   # Returns "F320"
+[1] "F320"
+> remove_dot("E11.9")   # Returns "E119"
+[1] "E119"
+> remove_dot("F32")     # Returns "F32" (no dot to remove)
+[1] "F32"
+> remove_dot("A01.01")  # Returns "A0101"
+[1] "A0101"
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("sample_icd10cm")
+> ### * sample_icd10cm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sample_icd10cm
+> ### Title: Generate sample ICD-10-CM diagnosis data
+> ### Aliases: sample_icd10cm
+> 
+> ### ** Examples
+> 
+> # Generate 100 records for 10 patients
+> sample_icd10cm(n = 100)
+# A tibble: 100 × 3
+   patient_id icd10cm_code code_date 
+        <int> <chr>        <date>    
+ 1          9 S62025S      2025-08-24
+ 2          4 O368199      2025-06-20
+ 3          7 S42241K      2015-11-20
+ 4          1 S27899D      2021-09-05
+ 5          2 F1011        2022-08-17
+ 6          7 S76892D      2021-12-24
+ 7          2 T2022XS      2021-06-29
+ 8          3 S00571A      2020-08-17
+ 9          1 M9941        2022-05-25
+10          5 T25129A      2016-12-09
+# ℹ 90 more rows
+> 
+> # Generate more records with more patients
+> sample_icd10cm(n = 1000, p = 50)
+# A tibble: 1,000 × 3
+   patient_id icd10cm_code code_date 
+        <int> <chr>        <date>    
+ 1         50 F609         2024-05-19
+ 2         14 S12691D      2022-05-07
+ 3         13 T85635S      2020-09-13
+ 4         31 G43511       2018-04-23
+ 5         47 T84121S      2021-11-05
+ 6         34 S62330G      2018-04-29
+ 7         30 M8938        2024-07-04
+ 8         26 S92013G      2023-12-16
+ 9         45 S12030G      2016-02-28
+10         48 T63814D      2016-11-11
+# ℹ 990 more rows
+> 
+> # Sample only from mental health codes (F codes)
+> sample_icd10cm(n = 100, start_code = "F00", end_code = "F99")
+# A tibble: 100 × 3
+   patient_id icd10cm_code code_date 
+        <int> <chr>        <date>    
+ 1          9 F0634        2018-04-10
+ 2          3 F12259       2017-10-16
+ 3         10 F14181       2022-12-31
+ 4          2 F1621        2024-05-11
+ 5          9 F1619        2024-06-27
+ 6          6 F03918       2025-11-30
+ 7          8 F11120       2025-01-10
+ 8         10 F15120       2023-06-29
+ 9          4 F14222       2025-11-09
+10         10 F02A3        2017-11-13
+# ℹ 90 more rows
+> 
+> # Sample from diabetes codes
+> sample_icd10cm(n = 50, start_code = "E08", end_code = "E13")
+# A tibble: 50 × 3
+   patient_id icd10cm_code code_date 
+        <int> <chr>        <date>    
+ 1          9 E113291      2024-11-20
+ 2          7 E0910        2025-11-27
+ 3          5 E1052        2017-03-02
+ 4          5 E10630       2023-12-15
+ 5          9 E10628       2023-05-09
+ 6          4 E1121        2024-03-16
+ 7          5 E103521      2022-12-18
+ 8         10 E083513      2018-01-27
+ 9          8 E108         2018-10-27
+10          2 E0937X2      2024-03-02
+# ℹ 40 more rows
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  4.094 0.089 4.184 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

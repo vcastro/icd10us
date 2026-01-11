@@ -72,9 +72,9 @@ head(diabetes_codes)
 ```
 
 ```{r}
-# Find all chronic conditions (chronic_indicator == 1)
+# Find all chronic conditions
 chronic_conditions <- icd10cm %>%
-  filter(chronic_indicator == 1)
+  filter(chronic_indicator == "C")
 
 # Count chronic vs acute conditions
 icd10cm %>%
@@ -90,9 +90,9 @@ The `icd10cm_chapters` dataset organizes codes into 22 chapters:
 # View all chapters
 icd10cm_chapters
 
-# Find mental health chapter (PSYCH)
+# Find mental health chapter
 icd10cm_chapters %>%
-  filter(chapter_abbr == "PSYCH")
+  filter(chapter_abbr == "Mental")
 ```
 
 ## Working with Code Ranges
@@ -275,7 +275,7 @@ identify_chronic <- function(patient_codes) {
       icd10cm %>% select(icd10cm_code, chronic_indicator),
       by = "icd10cm_code"
     ) %>%
-    filter(chronic_indicator == 1)  # 1 = Chronic
+    filter(chronic_indicator == "C")
 }
 
 # Example with sample data

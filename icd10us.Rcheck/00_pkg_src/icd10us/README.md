@@ -39,9 +39,9 @@ library(dplyr)
 # Display ICD-10-CM codes dataset
 icd10cm 
 
-# Show only chronic diagnosis codes (based on AHRQ chronic indicator, 1=chronic)
+# Show only chronic diagnosis codes (based on AHRQ chronic indicator)
 icd10cm %>% 
-  filter(chronic_indicator == 1)
+  filter(chronic_indicator == "C")
 
 # Get all codes between two codes (includes children of end code)
 codes_between("F32", "F33")
@@ -84,10 +84,10 @@ icd10pcs_sections
 # View ICD-10-CM chapters (body systems)
 icd10cm_chapters
 
-# Get all codes from a specific chapter (e.g., Mental health - PSYCH)
+# Get all codes from a specific chapter
 icd10cm %>%
   semi_join(
-    icd10cm_chapters %>% filter(chapter_abbr == "PSYCH"),
+    icd10cm_chapters %>% filter(chapter_abbr == "Mental"),
     by = character()
   ) %>%
   filter(icd10cm_code >= "F01" & icd10cm_code <= "F99")
