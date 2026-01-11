@@ -1,0 +1,359 @@
+---
+title: "Introduction to icd10us"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to icd10us}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(icd10us)
+library(dplyr)
+```
+
+## Overview
+
+The `icd10us` package provides comprehensive data and tools for working with ICD-10 codes in the United States healthcare context. It includes:
+
+- **ICD-10-CM diagnosis codes** with metadata
+- **ICD-10-PCS procedure codes** with metadata  
+- Utility functions for transforming, filtering, and grouping codes
+
+All datasets in this package are in the **public domain**, sourced from:
+
+- Centers for Medicare and Medicaid Services (CMS)
+- Centers for Disease Control and Prevention (CDC)
+- Healthcare Cost and Utilization Project (HCUP) from the Agency for Healthcare Research and Quality (AHRQ)
+
+## ICD-10-CM Diagnosis Codes
+
+### The icd10cm Dataset
+
+The `icd10cm` dataset contains all official ICD-10-CM diagnosis codes used in the United States:
+
+```{r}
+# View the structure of the dataset
+str(icd10cm)
+
+# See first few rows
+head(icd10cm)
+```
+
+Each row represents one ICD-10-CM code with the following information:
+
+- **icd10cm_code**: The code itself (without dot)
+- **icd10cm_short_description**: Brief description
+- **icd10cm_long_description**: Full description
+- **valid_billing_code**: Whether the code can be used for billing (1=Yes, 0=No)
+- **poa_exempt**: Present on Admission (POA) exemption status
+- **chronic_indicator**: Classification as chronic (C) or acute (A) condition
+
+### Filtering Codes
+
+You can filter the dataset using standard `dplyr` functions:
+
+```{r}
+# Find all valid billing codes for diabetes
+diabetes_codes <- icd10cm %>%
+  filter(
+    icd10cm_code >= "E08" & icd10cm_code <= "E13",
+    valid_billing_code == 1
+  )
+
+head(diabetes_codes)
+```
+
+```{r}
+# Find all chronic conditions
+chronic_conditions <- icd10cm %>%
+  filter(chronic_indicator == "C")
+
+# Count chronic vs acute conditions
+icd10cm %>%
+  filter(!is.na(chronic_indicator)) %>%
+  count(chronic_indicator)
+```
+
+### Chapter Organization
+
+The `icd10cm_chapters` dataset organizes codes into 22 chapters:
+
+```{r}
+# View all chapters
+icd10cm_chapters
+
+# Find mental health chapter
+icd10cm_chapters %>%
+  filter(chapter_abbr == "Mental")
+```
+
+## Working with Code Ranges
+
+### Getting Codes Between Two Codes
+
+The `codes_between()` function retrieves all codes in a range:
+
+```{r}
+# Get all depression codes (F32-F33)
+depression_codes <- codes_between("F32", "F33")
+
+# View billable codes only
+depression_codes %>%
+  filter(valid_billing_code == 1) %>%
+  select(icd10cm_code, icd10cm_short_description)
+```
+
+By default, `codes_between()` expands the end code to include all its children:
+
+```{r}
+# With expansion (default)
+codes_with_expansion <- codes_between("F32", "F33", expand_end_code = TRUE)
+nrow(codes_with_expansion)
+
+# Without expansion
+codes_without_expansion <- codes_between("F32", "F33", expand_end_code = FALSE)
+nrow(codes_without_expansion)
+```
+
+### Expanding a Code
+
+The `expand_code()` function shows all child (more specific) codes:
+
+```{r}
+# Expand F32 to see all subtypes
+f32_codes <- expand_code("F32")
+
+# Show billable codes
+f32_codes %>%
+  filter(valid_billing_code == 1) %>%
+  select(icd10cm_code, icd10cm_short_description)
+```
+
+### Finding Header Codes
+
+The `header_code()` function finds the parent/header code for a specific code:
+
+```{r}
+# Get header for a specific code
+header_code("F320")
+
+# Get header for an already-header code
+header_code("F32")
+```
+
+## Code Validation and Formatting
+
+### Validating Code Format
+
+The `is_valid_icd10cm()` function checks if a string matches ICD-10-CM format:
+
+```{r}
+# Valid ICD-10-CM codes
+is_valid_icd10cm("F320")    # TRUE
+is_valid_icd10cm("E119")    # TRUE
+is_valid_icd10cm("F32")     # TRUE
+
+# Invalid codes
+is_valid_icd10cm("296")     # FALSE - ICD-9 format
+is_valid_icd10cm("F")       # FALSE - too short
+is_valid_icd10cm("ABCD")    # FALSE - no numbers
+```
+
+Note: This only validates the **format**, not whether the code actually exists in the official code set.
+
+### Adding and Removing Dots
+
+ICD-10 codes can be formatted with or without decimal points:
+
+```{r}
+# Add dots
+add_dot("F320")     # Returns "F32.0"
+add_dot("E1165")    # Returns "E11.65"
+add_dot("F32")      # Returns "F32" (3-char codes don't need dots)
+
+# Remove dots
+remove_dot("F32.0")   # Returns "F320"
+remove_dot("E11.65")  # Returns "E1165"
+remove_dot("F32")     # Returns "F32" (no dot to remove)
+```
+
+## ICD-10-PCS Procedure Codes
+
+### The icd10pcs Dataset
+
+The `icd10pcs` dataset contains all official ICD-10-PCS procedure codes:
+
+```{r}
+# View the structure
+str(icd10pcs)
+
+# See first few rows
+head(icd10pcs)
+```
+
+Each procedure code includes a classification from HCUP:
+
+- **Minor Diagnostic**: Non-operating room diagnostic procedures
+- **Minor Therapeutic**: Non-operating room therapeutic procedures  
+- **Major Diagnostic**: Operating room diagnostic procedures
+- **Major Therapeutic**: Operating room therapeutic procedures
+
+```{r}
+# Count procedures by class
+icd10pcs %>%
+  filter(!is.na(procedure_class)) %>%
+  count(procedure_class, sort = TRUE)
+```
+
+### Procedure Sections
+
+The `icd10pcs_sections` dataset shows the top-level organization:
+
+```{r}
+# View all sections
+icd10pcs_sections
+
+# Medical and Surgical is the largest section
+icd10pcs %>%
+  filter(stringr::str_starts(icd10pcs_code, "0")) %>%
+  nrow()
+```
+
+## Generating Sample Data
+
+The `sample_icd10cm()` function generates synthetic diagnosis data for testing:
+
+```{r}
+# Generate 100 records for 10 patients
+sample_data <- sample_icd10cm(n = 100, p = 10)
+head(sample_data)
+
+# Summary of the sample
+sample_data %>%
+  summarize(
+    n_records = n(),
+    n_patients = n_distinct(patient_id),
+    n_unique_codes = n_distinct(icd10cm_code),
+    date_range = paste(min(code_date), "to", max(code_date))
+  )
+```
+
+You can also sample from specific code ranges:
+
+```{r}
+# Sample only mental health codes
+mental_health_sample <- sample_icd10cm(
+  n = 50, 
+  p = 10,
+  start_code = "F00",
+  end_code = "F99"
+)
+
+# Verify all codes are F codes
+mental_health_sample %>%
+  pull(icd10cm_code) %>%
+  head()
+```
+
+## Common Use Cases
+
+### Use Case 1: Identifying Chronic Conditions
+
+```{r}
+# Create a function to identify chronic conditions in patient data
+identify_chronic <- function(patient_codes) {
+  patient_codes %>%
+    left_join(
+      icd10cm %>% select(icd10cm_code, chronic_indicator),
+      by = "icd10cm_code"
+    ) %>%
+    filter(chronic_indicator == "C")
+}
+
+# Example with sample data
+sample_patients <- sample_icd10cm(n = 50, p = 5)
+chronic_diagnoses <- identify_chronic(sample_patients)
+
+chronic_diagnoses %>%
+  count(patient_id, sort = TRUE)
+```
+
+### Use Case 2: Grouping by Chapter
+
+```{r}
+# Assign chapter to diagnosis codes
+assign_chapter <- function(codes_df) {
+  # Create a helper function to find chapter
+  find_chapter <- function(code) {
+    icd10cm_chapters %>%
+      filter(code_start <= code & code_end >= code) %>%
+      pull(chapter_desc) %>%
+      first()
+  }
+  
+  codes_df %>%
+    rowwise() %>%
+    mutate(chapter = find_chapter(icd10cm_code)) %>%
+    ungroup()
+}
+
+# Example
+sample_with_chapters <- assign_chapter(sample_icd10cm(n = 30, p = 5))
+
+sample_with_chapters %>%
+  count(chapter, sort = TRUE)
+```
+
+### Use Case 3: Validating External Data
+
+```{r}
+# Suppose you have codes from an external source
+external_codes <- c("F320", "E119", "Z99", "296", "INVALID")
+
+# Validate format
+validation_results <- tibble(
+  code = external_codes,
+  valid_format = is_valid_icd10cm(code),
+  exists_in_codeset = code %in% icd10cm$icd10cm_code
+)
+
+validation_results
+```
+
+## Data Provenance and Public Domain Status
+
+All datasets in this package are derived from **public domain** sources:
+
+### ICD-10-CM Data Sources
+- **Codes and Descriptions**: CMS via CDC/NCHS
+- **POA Exemptions**: CDC/NCHS  
+- **Chronic Condition Indicators**: AHRQ HCUP
+
+### ICD-10-PCS Data Sources
+- **Codes and Descriptions**: CMS
+- **Procedure Classifications**: AHRQ HCUP
+
+These data are freely available and can be used without restriction for research, clinical, and commercial purposes.
+
+## Getting Help
+
+For more information:
+
+- Package documentation: `?icd10us`
+- Function help: `?codes_between`, `?expand_code`, etc.
+- GitHub repository: https://github.com/vcastro/icd10us
+- Report issues: https://github.com/vcastro/icd10us/issues
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
