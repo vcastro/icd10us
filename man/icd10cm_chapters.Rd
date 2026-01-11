@@ -7,17 +7,36 @@
 \format{
 A data frame with 5 variables:
 \describe{
-\item{\code{chapter_num}}{number of chapter}
-\item{\code{chapter_abbr}}{chapter abbreviation}
+\item{\code{chapter_num}}{number of chapter (1-22)}
+\item{\code{chapter_abbr}}{chapter abbreviation for easy reference}
 \item{\code{chapter_desc}}{chapter long description}
-\item{\code{code_start}}{first code in the chapter}
-\item{\code{code_end}}{last code in the chapter}
+\item{\code{code_start}}{first ICD-10-CM code in the chapter}
+\item{\code{code_end}}{last ICD-10-CM code in the chapter}
 }
 }
 \usage{
 icd10cm_chapters
 }
 \description{
-ICD-10-cM diagnosis code chapters (body systems)
+Classification of ICD-10-CM diagnosis codes into chapters representing
+different body systems or conditions. This provides a high-level organization
+of the diagnosis code structure.
+}
+\details{
+ICD-10-CM codes are organized into 22 chapters, each representing a major
+body system or type of condition (e.g., Infectious diseases, Neoplasms,
+Mental and behavioral disorders, etc.). This dataset helps users understand
+the overall structure and filter codes by chapter.
+
+This data is derived from the official ICD-10-CM structure and is in the
+\strong{public domain}.
+}
+\examples{
+# View all chapters
+icd10cm_chapters
+
+# Find the chapter for mental health conditions
+library(dplyr)
+icd10cm_chapters \%>\% filter(chapter_abbr == "Mental")
 }
 \keyword{datasets}

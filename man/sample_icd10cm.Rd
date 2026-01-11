@@ -2,28 +2,57 @@
 % Please edit documentation in R/sample_icd10cm.R
 \name{sample_icd10cm}
 \alias{sample_icd10cm}
-\title{Sample ICD-10-CM diagnosis codes}
+\title{Generate sample ICD-10-CM diagnosis data}
 \usage{
 sample_icd10cm(n = 100, p = 10, start_code = "A00", end_code = "Z99")
 }
 \arguments{
-\item{n}{number of ICD-10-CM to sample}
+\item{n}{Number of diagnosis records to generate (default: 100)}
 
-\item{p}{number of distinct patients to sample}
+\item{p}{Number of distinct patients to include in the sample (default: 10)}
 
-\item{start_code}{Lowest ICD-10-CM code to sample (default: A00)}
+\item{start_code}{Lowest ICD-10-CM code to sample from (default: "A00")}
 
-\item{end_code}{Highest ICD-10-CM code to sample (default: Z99)}
+\item{end_code}{Highest ICD-10-CM code to sample from (default: "Z99")}
 }
 \value{
-tibble
+A tibble with three columns:
+\itemize{
+\item \code{patient_id}: Integer patient identifier (1 to p)
+\item \code{icd10cm_code}: Randomly sampled valid billing ICD-10-CM code
+\item \code{code_date}: Randomly sampled date between 2015-10-01 and today
+}
 }
 \description{
 #' @description
-\code{sample_icd10cm} returns a tibble of a random sample of ICD-10-CM diagnosis.
-Currently there is uniform sampling across all billable ICD-10 codes.  Dates
-and patient IDs are also randomly generated
+\code{sample_icd10cm()} returns a tibble of randomly sampled ICD-10-CM diagnoses
+with synthetic patient IDs and dates. This is useful for generating test
+data, examples, or demonstrations.
+}
+\details{
+Currently performs uniform sampling across all billable ICD-10 codes within
+the specified range. Dates and patient IDs are randomly generated.
+
+The function only samples from valid billing codes (codes with
+\code{valid_billing_code == 1}), as these are the codes that would typically
+appear in actual healthcare data.
+
+Patient IDs are sampled with replacement, so patients may have multiple
+diagnoses in the generated dataset.
+
+The default date range starts from October 1, 2015 (when ICD-10 was
+implemented in the U.S.) through the current date.
 }
 \examples{
-sample_icd10cm(n=1000)
+# Generate 100 records for 10 patients
+sample_icd10cm(n = 100)
+
+# Generate more records with more patients
+sample_icd10cm(n = 1000, p = 50)
+
+# Sample only from mental health codes (F codes)
+sample_icd10cm(n = 100, start_code = "F00", end_code = "F99")
+
+# Sample from diabetes codes
+sample_icd10cm(n = 50, start_code = "E08", end_code = "E13")
 }

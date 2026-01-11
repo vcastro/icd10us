@@ -2,20 +2,43 @@
 % Please edit documentation in R/expand_code.R
 \name{expand_code}
 \alias{expand_code}
-\title{List all codes between two sets of codes}
+\title{Expand an ICD-10-CM code to show all child codes}
 \usage{
 expand_code(x)
 }
 \arguments{
-\item{x}{a valid ICD-10-CM code}
+\item{x}{A valid ICD-10-CM code (3 or more characters)}
 }
 \value{
-Tibble of all matching ICD-10-CM rows from icd10cm
+A tibble containing all matching ICD-10-CM rows from the icd10cm
+dataset. Returns an empty tibble if no matching codes are found.
 }
 \description{
-\code{expand_code} returns a tibble of all ICD-10-CM codes that
-are child codes of the provided code.
+\code{expand_code()} returns a tibble of all ICD-10-CM codes that
+are child codes of the provided code. Child codes are more specific
+versions of a parent code, adding additional detail through extra digits.
+}
+\details{
+In ICD-10-CM, codes become more specific as you add digits. For example:
+\itemize{
+\item F32 - Major depressive disorder, single episode
+\item F320 - Major depressive disorder, single episode, mild
+\item F321 - Major depressive disorder, single episode, moderate
+}
+
+This function finds all codes that start with the provided code string,
+effectively expanding a code to show all its more specific variations.
 }
 \examples{
+# Expand F32 to see all depression subtypes
 expand_code("F32")
+
+# Expand a more specific code
+expand_code("F320")
+
+# Can be used with other functions
+library(dplyr)
+expand_code("F32") \%>\%
+  filter(valid_billing_code == 1) \%>\%
+  select(icd10cm_code, icd10cm_short_description)
 }

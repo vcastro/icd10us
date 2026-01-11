@@ -14,9 +14,10 @@ code 1=Yes, 0=No}
 \item{\code{icd10cm_short_description}}{ICD-10-CM short description}
 \item{\code{icd10cm_long_description}}{ICD-10-CM long description}
 \item{\code{poa_exempt}}{Flag to indicate if code is exempt from present
-on admission (POA) rules}
+on admission (POA) rules. Y=Exempt, N=Not exempt, NA=Not applicable}
 \item{\code{chronic_indicator}}{Flag to indicate if code is acute or
-chronic based on HCUP Chronic Care Indicator data}
+chronic based on HCUP Chronic Care Indicator data. C=Chronic, A=Acute,
+NA=Not applicable}
 }
 }
 \source{
@@ -33,6 +34,33 @@ CCI-ICD10CM-v2021-1.zip}
 icd10cm
 }
 \description{
-ICD-10-CM diagnosis codes
+A comprehensive dataset of ICD-10-CM diagnosis codes used in the United States.
+ICD-10-CM (International Classification of Diseases, 10th Revision, Clinical
+Modification) is the standard diagnostic coding system used by healthcare
+providers and payers.
+}
+\details{
+This dataset combines data from multiple public domain sources:
+\itemize{
+\item \strong{ICD-10-CM codes and descriptions}: From CMS, representing the official
+U.S. clinical modification of the WHO's ICD-10
+\item \strong{POA (Present on Admission) exemptions}: From CDC/NCHS, indicating which
+codes are exempt from POA reporting requirements
+\item \strong{Chronic condition indicators}: From AHRQ HCUP, classifying conditions
+as chronic or acute based on their typical duration
+}
+
+All data sources are in the \strong{public domain} and freely available for use.
+}
+\examples{
+# View the first few rows
+head(icd10cm)
+
+# Filter to valid billing codes only
+library(dplyr)
+icd10cm \%>\% filter(valid_billing_code == 1)
+
+# Find all chronic conditions
+icd10cm \%>\% filter(chronic_indicator == "C")
 }
 \keyword{datasets}

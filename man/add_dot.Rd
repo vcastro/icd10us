@@ -10,14 +10,27 @@ add_dot(x)
 \item{x}{A valid ICD-10 code without a dot}
 }
 \value{
-A valid ICD-10 code with a dot included
+A valid ICD-10 code with a dot included (if applicable).
+Codes with only 3 characters are returned unchanged since they don't
+require a dot.
 }
 \description{
-\code{add_dot()} adds a dot to the ICD-10 code in the appropriate position
-where one does not exist
+\code{add_dot()} adds a dot (decimal point) to an ICD-10 code in the
+appropriate position (after the first 3 characters) where one does not exist.
+This converts codes to the "dotted" format commonly used in clinical documentation.
+}
+\details{
+ICD-10 codes can be represented with or without a decimal point. The
+decimal is always placed after the first 3 characters (e.g., "F32.0"
+not "F3.20"). This function performs that conversion.
+
+Codes with 3 or fewer characters don't need a dot and are returned unchanged.
+The input code must not already contain a dot.
 }
 \examples{
-add_dot("F320")
+add_dot("F320")     # Returns "F32.0"
+add_dot("E119")     # Returns "E11.9"
+add_dot("F32")      # Returns "F32" (no dot added for 3-character codes)
+add_dot("A0101")    # Returns "A01.01"
 
-add_dot("F32")  # no dot added if code is only 3-digits
 }
