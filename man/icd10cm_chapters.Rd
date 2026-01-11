@@ -35,8 +35,8 @@ This data is derived from the official ICD-10-CM structure and is in the
 # View all chapters
 icd10cm_chapters
 
-# Find the chapter for mental health conditions
+# Find the chapter for mental health conditions (PSYCH)
 library(dplyr)
-icd10cm_chapters \%>\% filter(chapter_abbr == "Mental")
+icd10cm_chapters \%>\% filter(chapter_abbr == "PSYCH")
 }
 \keyword{datasets}

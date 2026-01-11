@@ -54,7 +54,7 @@ Each row represents one ICD-10-CM code with the following information:
 - **icd10cm_long_description**: Full description
 - **valid_billing_code**: Whether the code can be used for billing (1=Yes, 0=No)
 - **poa_exempt**: Present on Admission (POA) exemption status
-- **chronic_indicator**: Classification as chronic (C) or acute (A) condition
+- **chronic_indicator**: Classification as chronic (1) or acute (0) condition, 9=Missing/Not applicable
 
 ### Filtering Codes
 

@@ -47,8 +47,8 @@
 #' library(dplyr)
 #' icd10cm %>% filter(valid_billing_code == 1)
 #' 
-#' # Find all chronic conditions
-#' icd10cm %>% filter(chronic_indicator == "C")
+#' # Find all chronic conditions (chronic_indicator == 1)
+#' icd10cm %>% filter(chronic_indicator == 1)
 "icd10cm"
 
 
@@ -81,7 +81,7 @@
 #' # View all chapters
 #' icd10cm_chapters
 #' 
-#' # Find the chapter for mental health conditions
+#' # Find the chapter for mental health conditions (PSYCH)
 #' library(dplyr)
-#' icd10cm_chapters %>% filter(chapter_abbr == "Mental")
+#' icd10cm_chapters %>% filter(chapter_abbr == "PSYCH")
 "icd10cm_chapters"
