@@ -1,4 +1,3 @@
-library(dplyr)
 library(stringr)
 
 test_that("icd10pcs has expected structure", {
@@ -14,14 +13,7 @@ test_that("icd10pcs has required columns", {
 })
 
 test_that("icd10pcs data has no duplicate icd10pcs_codes", {
-  expect_equal(
-    icd10pcs %>%
-      group_by(icd10pcs_code) %>%
-      count() %>%
-      filter(n > 1) %>%
-      nrow(),
-    0
-  )
+  expect_equal(length(unique(icd10pcs$icd10pcs_code)), nrow(icd10pcs))
 })
 
 test_that("icd10pcs has no missing values in key columns", {
@@ -41,14 +33,7 @@ test_that("icd10pcs codes have correct format", {
 })
 
 test_that("icd10pcs order numbers are unique", {
-  expect_equal(
-    icd10pcs %>%
-      group_by(order_number) %>%
-      count() %>%
-      filter(n > 1) %>%
-      nrow(),
-    0
-  )
+  expect_equal(length(unique(icd10pcs$order_number)), nrow(icd10pcs))
 })
 
 test_that("icd10pcs procedure_class has valid values", {

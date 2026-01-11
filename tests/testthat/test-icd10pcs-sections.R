@@ -1,4 +1,3 @@
-library(dplyr)
 library(stringr)
 
 test_that("icd10pcs_sections has expected structure", {
@@ -17,14 +16,7 @@ test_that("icd10pcs_sections has no missing values", {
 })
 
 test_that("icd10pcs_sections has unique section digits", {
-  expect_equal(
-    icd10pcs_sections %>%
-      group_by(section_digit) %>%
-      count() %>%
-      filter(n > 1) %>%
-      nrow(),
-    0
-  )
+  expect_equal(length(unique(icd10pcs_sections$section_digit)), nrow(icd10pcs_sections))
 })
 
 test_that("icd10pcs_sections section_digit is single character", {

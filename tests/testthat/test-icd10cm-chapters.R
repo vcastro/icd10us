@@ -25,14 +25,7 @@ test_that("icd10cm_chapters has valid code ranges", {
 })
 
 test_that("icd10cm_chapters has unique chapter numbers", {
-  expect_equal(
-    icd10cm_chapters %>%
-      group_by(chapter_num) %>%
-      count() %>%
-      filter(n > 1) %>%
-      nrow(),
-    0
-  )
+  expect_equal(length(unique(icd10cm_chapters$chapter_num)), nrow(icd10cm_chapters))
 })
 
 test_that("icd10cm_chapters has positive chapter numbers", {
