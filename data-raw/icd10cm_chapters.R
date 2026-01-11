@@ -16,7 +16,7 @@ icd10cm_chapters <- tribble(
   14, "URO",  "Diseases of the genitourinary system", "N00", "N99",
   15, "OB",   "Pregnancy, childbirth and the puerperium", "O00", "O9A",
   16, "BIRTH","Certain conditions originating in the perinatal period", "P00", "P96",
-  17, "CONG", "Congenital malformations, deformations and chromosomal abnormalities", "Q00", "Q99",
+  17, "CONG", "Congenital malformations, deformations and chromosomal abnormalities", "Q00", "QA09",
   18, "SYMP", "Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified", "R00", "R99",
   19, "INJ",  "Injury, poisoning and certain other consequences of external causes", "S00", "T88",
   20, "EXT",  "External causes of morbidity", "V00", "Y99",

@@ -5,3 +5,4 @@
 data-raw/*.zip
 data-raw/*.txt
 data-raw/*.csv
+.DS_Store

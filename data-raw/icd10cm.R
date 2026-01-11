@@ -1,22 +1,22 @@
 library(readr)
 
-## Load 2022 version
+## Load 2026 version
 
-download.file(url = "ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10CM/2022/Code Descriptions zip.zip",
-              destfile = "data-raw/2022_Code_Description_zip.zip",
+download.file(url = "https://www.cms.gov/files/zip/2026-code-descriptions-tabular-order.zip",
+              destfile = "data-raw/2026-code-descriptions-tabular-order.zip",
               method = "libcurl")
 
 
 unzip(
-  "data-raw/2022_Code_Description_zip.zip",
-  files = "Code Descriptions/icd10cm-order-2022.txt",
+  "data-raw/2026-code-descriptions-tabular-order.zip",
+  files = "icd10cm_order_2026.txt",
   exdir = "data-raw",
   junkpaths = TRUE
 )
 
 
 icd10cm <- read_fwf(
-  "data-raw/icd10cm-order-2022.txt",
+  "data-raw/icd10cm_order_2026.txt",
   fwf_cols(
       order_number = c(1,5),
       icd10cm_code = c(7,13),
@@ -29,20 +29,20 @@ icd10cm <- read_fwf(
 
 ### add POA
 
-download.file(url = "ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10CM/2022/POAexemptCodesFY22.zip",
-              destfile = "data-raw/POAexemptCodesFY22.zip",
+download.file(url = "https://ftp.cdc.gov/pub/health_statistics/nchs/publications/ICD10CM/2026/POAexemptCodesFY26.zip",
+              destfile = "data-raw/POAexemptCodesFY26.zip",
               method = "libcurl")
 
 unzip(
-  "data-raw/POAexemptCodesFY22.zip",
-  files = "POAexemptCodesFY22.txt",
+  "data-raw/POAexemptCodesFY26.zip",
+  files = "POAexemptCodesFY26.txt",
   exdir = "data-raw",
   junkpaths = TRUE
 )
 
-icd10cm_poa <- read_tsv("data-raw/POAexemptCodesFY22.txt",
+icd10cm_poa <- read_tsv("data-raw/POAexemptCodesFY26.txt",
                         col_types = c("i", "c", "c")) %>%
-               rename(order_number = Order2022,
+               rename(order_number = Order26,
                       poa_exempt_code = POAexemptCode)
 
 
@@ -58,18 +58,18 @@ icd10cm <- icd10cm %>%
 
 ### add HCUP chronic_indicator
 
-download.file(url = "https://www.hcup-us.ahrq.gov/toolssoftware/chronic_icd10/CCI-ICD10CM-v2021-1.zip",
-              destfile = "data-raw/CCI-ICD10CM-v2021-1.zip",
+download.file(url = "https://hcup-us.ahrq.gov/toolssoftware/chronic_icd10/CCIR_v2026-1.zip",
+              destfile = "data-raw/CCIR_v2026-1.zip",
               method = "libcurl")
 
 unzip(
-  "data-raw/CCI-ICD10CM-v2021-1.zip",
-  files = "CCI_ICD10CM_v2021-1.csv",
+  "data-raw/CCIR-2026-1.zip",
+  files = "CCIR_v2026-1.csv",
   exdir = "data-raw",
   junkpaths = TRUE
 )
 
-icd10cm_cci <- read_csv("data-raw/CCI_ICD10CM_v2021-1.csv",
+icd10cm_cci <- read_csv("data-raw/CCIR_v2026-1.csv",
                         skip = 2,
                         col_types = c("c", "c", "c")) %>%
                select(icd10cm_code = `'ICD-10-CM CODE'`,

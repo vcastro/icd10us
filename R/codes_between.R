@@ -18,7 +18,7 @@
 #' codes_between("F32", "F33")
 codes_between <-
   function(start_code, end_code, expand_end_code = TRUE) {
-    stopifnot(end_code > start_code)
+    stopifnot(end_code >= start_code)
     stopifnot(stringr::str_length(start_code) >= 3)
     stopifnot(stringr::str_length(end_code) >= 3)
 

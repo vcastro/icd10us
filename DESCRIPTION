@@ -1,6 +1,6 @@
 Package: icd10us
 Title: Work with U.S. ICD-10 Diagnosis and Procedure Codes
-Version: 2022.1
+Version: 2026.1
 Authors@R: 
     person(given = "Victor", 
            family = "Castro", 
@@ -16,7 +16,7 @@ Encoding: UTF-8
 LazyData: true
 Language: en
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.3
 Imports: 
     dplyr,
     magrittr,
@@ -28,6 +28,6 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5)
 URL: https://github.com/vcastro/icd10us
 BugReports: https://github.com/vcastro/icd10us/issues

@@ -13,7 +13,7 @@ is_valid_icd10cm(x)
 Boolean
 }
 \description{
-\code{is_valid_icd10cm} checks to see if the ICD-10-CM code is valid
+\code{is_valid_icd10cm} checks to see if a string is a valid ICD-10-CM code
 and has between 3 and 8 characters, and starts with a letter and number.
 }
 \examples{

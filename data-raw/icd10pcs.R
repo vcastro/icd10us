@@ -1,22 +1,22 @@
 library(readr)
 
-## Load 2022 version
+## Load 2026 version
 
-download.file(url = "https://www.cms.gov/files/zip/2022-icd-10-pcs-order-file-long-and-abbreviated-titles.zip",
-              destfile = "data-raw/2022-icd-10-pcs-order-file-long-and-abbreviated-titles.zip",
+download.file(url = "https://www.cms.gov/files/zip/2026-icd-10-pcs-order-file-long-and-abbreviated-titles.zip",
+              destfile = "data-raw/2026-icd-10-pcs-order-file-long-and-abbreviated-titles.zip",
               method = "libcurl")
 
 
 unzip(
-  "data-raw/2022-icd-10-pcs-order-file-long-and-abbreviated-titles.zip",
-  files = "Zip File 4 2022 ICD-10-PCS Order File (Long and Abbreviated Titles)/icd10pcs_order_2022.txt",
+  "data-raw/2026-icd-10-pcs-order-file-long-and-abbreviated-titles.zip",
+  files = "icd10pcs_order_2026.txt",
   exdir = "data-raw",
   junkpaths = TRUE
 )
 
 
 icd10pcs <- read_fwf(
-  "data-raw/icd10pcs_order_2022.txt",
+  "data-raw/icd10pcs_order_2026.txt",
   fwf_cols(
     order_number = c(1,5),
     icd10pcs_code = c(7,13),
@@ -30,24 +30,24 @@ icd10pcs <- read_fwf(
 ## HCUP Procedure Classes
 
 
-download.file(url = "https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/ProcedureClasses_v2021-2.zip",
-              destfile = "data-raw/ProcedureClasses_v2021-2.zip",
+download.file(url = "https://hcup-us.ahrq.gov/toolssoftware/procedureicd10/PClassR_v2026-1.zip",
+              destfile = "data-raw/PClassR_v2026-1.zip",
               method = "libcurl")
 
 
 unzip(
-  "data-raw/ProcedureClasses_v2021-2.zip",
-  files = "PClass_ICD10PCS_v2021-2.csv",
+  "data-raw/PClassR_v2026-1.zip",
+  files = "PClassR_v2026-1.csv",
   exdir = "data-raw",
   junkpaths = TRUE
 )
 
 
 icd10pcs_class <- read_csv(
-    "data-raw/PClass_ICD10PCS_v2021-2.csv",
+    "data-raw/PClassR_v2026-1.csv",
     skip = 1,
     col_types = c("c", "c", "i", "c")) %>%
-  select(icd10pcs_code = `ICD-10-PCS CODE'`,
+  select(icd10pcs_code = `'ICD-10-PCS CODE'`,
          procedure_class = `'PROCEDURE CLASS NAME'`) %>%
   mutate(icd10pcs_code = str_replace_all(icd10pcs_code, "'", ""))
 
