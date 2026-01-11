@@ -29,9 +29,9 @@ test_that("expand_code works with 3-character codes", {
 })
 
 test_that("expand_code works with longer codes", {
-  result <- expand_code("F320")
+  result <- expand_code("F328")
   expect_s3_class(result, "data.frame")
-  expect_true(all(str_starts(result$icd10cm_code, "F320")))
+  expect_true(all(str_starts(result$icd10cm_code, "F328")))
 })
 
 # Tests for codes_between()
@@ -187,8 +187,8 @@ test_that("header_code returns a data frame", {
 test_that("header_code returns header code for detailed code", {
   result <- header_code("F320")
   expect_equal(nrow(result), 1)
-  expect_true(result$order_number <= icd10cm %>% 
-                filter(icd10cm_code == "F320") %>% 
+  expect_true(result$order_number <= icd10cm %>%
+                filter(icd10cm_code == "F320") %>%
                 pull(order_number))
 })
 
@@ -198,7 +198,7 @@ test_that("header_code returns same code for header codes", {
     filter(valid_billing_code == 0 | str_length(icd10cm_code) == 3) %>%
     slice(1) %>%
     pull(icd10cm_code)
-  
+
   result <- header_code(header)
   expect_equal(nrow(result), 1)
   expect_equal(result$icd10cm_code, header)
