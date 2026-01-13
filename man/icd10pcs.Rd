@@ -8,13 +8,14 @@
 A data frame with 6 variables:
 \describe{
 \item{\code{order_number}}{file order from source data}
-\item{\code{icd10pcs_code}}{ICD-10-PCS code}
+\item{\code{icd10pcs_code}}{ICD-10-PCS code (7 characters)}
 \item{\code{valid_billing_code}}{Is the code a valid billing
 code 1=Yes, 0=No}
 \item{\code{icd10pcs_short_description}}{ICD-10-PCS short description}
 \item{\code{icd10pcs_long_description}}{ICD-10-PCS long description}
 \item{\code{procedure_class}}{class of procedure based on HCUP Procedure
-Class data}
+Class data: "Minor Diagnostic", "Minor Therapeutic", "Major Diagnostic",
+or "Major Therapeutic"}
 }
 }
 \source{
@@ -28,9 +29,19 @@ and-abbreviated-titles.zip}
 icd10pcs
 }
 \description{
-ICD-10-PCS procedure codes
+A comprehensive dataset of ICD-10-PCS procedure codes used in the United States.
+ICD-10-PCS (International Classification of Diseases, 10th Revision, Procedure
+Coding System) is used for coding inpatient procedures in U.S. hospitals.
 }
 \details{
+This dataset combines data from multiple public domain sources:
+\itemize{
+\item \strong{ICD-10-PCS codes and descriptions}: From CMS, representing the official
+U.S. procedure coding system used for inpatient procedures
+\item \strong{Procedure classifications}: From AHRQ HCUP, categorizing procedures by
+their clinical characteristics
+}
+
 Procedure class is derived from the HCUP Procedure Class file.  From the
 user guide, codes are divided into 4 classes:
 \itemize{
@@ -47,5 +58,18 @@ procedures that are performed for therapeutic reasons (e.g., 0210093, Bypass
 Coronary Artery, One Site from Coronary Artery with Autologous Venous Tissue,
 Open Approach).
 }
+
+All data sources are in the \strong{public domain} and freely available for use.
+}
+\examples{
+# View the first few rows
+head(icd10pcs)
+
+# Filter to valid billing codes only
+library(dplyr)
+icd10pcs \%>\% filter(valid_billing_code == 1)
+
+# Find all major therapeutic procedures
+icd10pcs \%>\% filter(procedure_class == "Major Therapeutic")
 }
 \keyword{datasets}

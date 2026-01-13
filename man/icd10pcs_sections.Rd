@@ -7,7 +7,7 @@
 \format{
 A data frame with 2 variables:
 \describe{
-\item{\code{section_digit}}{first digit from ICD-10-PCS codes}
+\item{\code{section_digit}}{first digit from ICD-10-PCS codes (0-9, B-H, X)}
 \item{\code{section_description}}{ICD-10-PCS section description}
 }
 }
@@ -15,6 +15,34 @@ A data frame with 2 variables:
 icd10pcs_sections
 }
 \description{
-ICD-10-PCS procedure code top-level sections
+Classification of ICD-10-PCS procedure codes into top-level sections.
+ICD-10-PCS codes are 7 characters long, with the first character indicating
+the section (e.g., Medical and Surgical, Obstetrics, Imaging, etc.).
+}
+\details{
+ICD-10-PCS codes follow a standardized structure where the first character
+defines the section. This dataset provides a reference for understanding
+what type of procedure a code represents based on its first character.
+
+Common sections include:
+\itemize{
+\item 0 - Medical and Surgical
+\item 1 - Obstetrics
+\item 2 - Placement
+\item 3-9 - Administration, Measurement and Monitoring, Extracorporeal, etc.
+\item B-H - Imaging, Nuclear Medicine, Radiation Therapy, etc.
+\item X - New Technology
+}
+
+This data is derived from the official ICD-10-PCS structure and is in the
+\strong{public domain}.
+}
+\examples{
+# View all sections
+icd10pcs_sections
+
+# Find the Medical and Surgical section
+library(dplyr)
+icd10pcs_sections \%>\% filter(section_digit == "0")
 }
 \keyword{datasets}

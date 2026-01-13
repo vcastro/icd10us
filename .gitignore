@@ -6,3 +6,6 @@ data-raw/*.zip
 data-raw/*.txt
 data-raw/*.csv
 .DS_Store
+*.tar.gz
+.Rcheck/
+icd10us.Rcheck/
