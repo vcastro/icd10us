@@ -12,7 +12,7 @@ Description: Primarily a data package that includes ICD-10-CM diagnosis and
     and Medicaid Services (CMS). Additional metadata from the Healthcare Cost and 
     Utilization Project (HCUP) is also included. All datasets are in the public 
     domain. Functions to transform, filter and group codes are also included.
-License: CC BY 4.0
+License: MIT
 Encoding: UTF-8
 LazyData: true
 Language: en

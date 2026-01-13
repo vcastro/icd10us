@@ -2,7 +2,7 @@
 #'
 #' A comprehensive dataset of ICD-10-CM diagnosis codes used in the United States.
 #' ICD-10-CM (International Classification of Diseases, 10th Revision, Clinical
-#' Modification) is the standard diagnostic coding system used by healthcare 
+#' Modification) is the standard diagnostic coding system used by healthcare
 #' providers and payers.
 #'
 #' @format A data frame with seven variables:
@@ -22,7 +22,7 @@
 #'
 #' @details
 #' This dataset combines data from multiple public domain sources:
-#' 
+#'
 #' * **ICD-10-CM codes and descriptions**: From CMS, representing the official
 #'   U.S. clinical modification of the WHO's ICD-10
 #' * **POA (Present on Admission) exemptions**: From CDC/NCHS, indicating which
@@ -30,23 +30,21 @@
 #' * **Chronic condition indicators**: From AHRQ HCUP, classifying conditions
 #'   as chronic or acute based on their typical duration
 #'
-#' All data sources are in the **public domain** and freely available for use.
-#'
 #' @source \url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/
-#' ICD10CM/2022/Code Descriptions zip.zip}
+#' ICD10CM/2026/Code Descriptions zip.zip}
 #' @source \url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/
-#' ICD10CM/2022/POAexemptCodesFY22.zip}
+#' ICD10CM/2026/POAexemptCodesFY22.zip}
 #' @source \url{https://www.hcup-us.ahrq.gov/toolssoftware/chronic_icd10/
 #' CCI-ICD10CM-v2021-1.zip}
-#' 
+#'
 #' @examples
 #' # View the first few rows
 #' head(icd10cm)
-#' 
+#'
 #' # Filter to valid billing codes only
 #' library(dplyr)
 #' icd10cm %>% filter(valid_billing_code == 1)
-#' 
+#'
 #' # Find all chronic conditions (chronic_indicator == 1)
 #' icd10cm %>% filter(chronic_indicator == 1)
 "icd10cm"
@@ -67,20 +65,20 @@
 #' \item{\code{code_start}}{first ICD-10-CM code in the chapter}
 #' \item{\code{code_end}}{last ICD-10-CM code in the chapter}
 #' }
-#' 
+#'
 #' @details
 #' ICD-10-CM codes are organized into 22 chapters, each representing a major
 #' body system or type of condition (e.g., Infectious diseases, Neoplasms,
 #' Mental and behavioral disorders, etc.). This dataset helps users understand
 #' the overall structure and filter codes by chapter.
-#' 
+#'
 #' This data is derived from the official ICD-10-CM structure and is in the
 #' **public domain**.
-#' 
+#'
 #' @examples
 #' # View all chapters
 #' icd10cm_chapters
-#' 
+#'
 #' # Find the chapter for mental health conditions (PSYCH)
 #' library(dplyr)
 #' icd10cm_chapters %>% filter(chapter_abbr == "PSYCH")

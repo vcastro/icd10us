@@ -22,10 +22,10 @@ chronic based on HCUP Chronic Care Indicator data. 1=Chronic, 0=Acute,
 }
 \source{
 \url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/
-ICD10CM/2022/Code Descriptions zip.zip}
+ICD10CM/2026/Code Descriptions zip.zip}
 
 \url{ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/
-ICD10CM/2022/POAexemptCodesFY22.zip}
+ICD10CM/2026/POAexemptCodesFY22.zip}
 
 \url{https://www.hcup-us.ahrq.gov/toolssoftware/chronic_icd10/
 CCI-ICD10CM-v2021-1.zip}
@@ -49,8 +49,6 @@ codes are exempt from POA reporting requirements
 \item \strong{Chronic condition indicators}: From AHRQ HCUP, classifying conditions
 as chronic or acute based on their typical duration
 }
-
-All data sources are in the \strong{public domain} and freely available for use.
 }
 \examples{
 # View the first few rows
